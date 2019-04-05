@@ -106,6 +106,9 @@ False or True #=> True
 # И строки тоже могут складываться! Хотя лучше не злоупотребляйте этим.
 "Привет " + "мир!" #=> "Привет мир!"
 
+# Строки можно умножать.
+"aa" * 4 #=> "aaaaaaaa"
+
 # Со строкой можно работать, как со списком символов
 "Это строка"[0] #=> 'Э'
 
@@ -549,7 +552,7 @@ Human.grunt() #=> "*grunt*"
 
 # Вы можете импортировать модули
 import math
-print(math.sqrt(16)) #=> 4
+print(math.sqrt(16)) #=> 4.0
 
 # Вы можете импортировать отдельные функции модуля
 from math import ceil, floor
@@ -593,7 +596,7 @@ def double_numbers(iterable):
 range_ = range(1, 900000000)
 
 # Будет удваивать все числа, пока результат не превысит 30
-for i in double_numbers(xrange_):
+for i in double_numbers(range_):
     print(i)
     if i >= 30:
         break

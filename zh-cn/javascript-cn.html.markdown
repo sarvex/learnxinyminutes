@@ -12,12 +12,9 @@ translators:
 lang: zh-cn
 ---
 
-Javascript于1995年由网景公司的Brendan Eich发明。
-最初发明的目的是作为一个简单的网站脚本语言，来作为
-复杂网站应用java的补充。但由于它与网页结合度很高并且由浏览器内置支持，
-所以javascript变得比java在前端更为流行了。
+Javascript 于 1995 年由网景公司的 Brendan Eich 发明。最初它作为一种简单的，用于开发网站的脚本语言而被发明出来，是用于开发复杂网站的 Java 的补充。但由于它与网页结合度很高并且在浏览器中得到内置的支持，所以在网页前端领域 Javascript 变得比 Java 更流行了。
 
-不过 JavaScript 可不仅仅只用于浏览器： Node.js，一个基于Google Chrome V8引擎的独立运行时环境，也越来越流行。
+不过，Javascript 不仅用于网页浏览器，一个名为 Node.js 的项目提供了面向 Google Chrome V8 引擎的独立运行时环境，它正在变得越来越流行。
 
 很欢迎来自您的反馈，您可以通过下列方式联系到我：
 [@adambrenecki](https://twitter.com/adambrenecki), 或者
@@ -341,7 +338,7 @@ var myFunc = myObj.myFunc;
 myFunc(); // = undefined
 
 // 相应的，一个函数也可以被指定为一个对象的方法，并且可以通过`this`访问
-// 这个对象的成员，即使在行数被定义时并没有依附在对象上。
+// 这个对象的成员，即使在函数被定义时并没有依附在对象上。
 var myOtherFunc = function(){
     return this.myString.toUpperCase();
 }
@@ -402,7 +399,7 @@ myObj.meaningOfLife; // = 42
 // 函数也可以工作。
 myObj.myFunc() // = "hello world!"
 
-// 当然，如果你要访问的成员在原型当中也没有定义的话，解释器就会去找原型的原型，以此类堆。
+// 当然，如果你要访问的成员在原型当中也没有定义的话，解释器就会去找原型的原型，以此类推。
 myPrototype.__proto__ = {
     myBoolean: true
 };
@@ -446,9 +443,6 @@ typeof myNumberObj; // = 'object'
 myNumber === myNumberObj; // = false
 if (0){
     // 这段代码不会执行，因为0代表假
-}
-if (Number(0)){
-    // 这段代码*会*执行，因为Number(0)代表真
 }
 
 // 不过，包装类型和内置类型共享一个原型，

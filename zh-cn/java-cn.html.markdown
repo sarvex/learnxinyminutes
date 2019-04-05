@@ -108,7 +108,7 @@ public class LearnJava {
         boolean [] booleanArray = new boolean[100];
 
         // 声明并初始化数组也可以这样:
-        int [] y = {9000, 1000, 1337};
+        int [] intArray = {9000, 1000, 1337};
 
         // 随机访问数组中的元素
         System.out.println("intArray @ 0: " + intArray[0]);
@@ -149,7 +149,7 @@ public class LearnJava {
 
         // 位运算操作符
         /*
-        ~       补
+        ~       取反，求反码
         <<      带符号左移
         >>      带符号右移
         >>>     无符号右移
@@ -302,14 +302,14 @@ class Bicycle {
 
     // 构造函数是初始化一个对象的方式
     // 以下是一个默认构造函数
-    public Bi450635425cycle() {
+    public Bicycle() {
         gear = 1;
         cadence = 50;
         speed = 5;
         name = "Bontrager";
     }
 
-    // 一下是一个含有参数的构造函数
+    // 以下是一个含有参数的构造函数
     public Bicycle(int startCadence, int startSpeed, int startGear, String name) {
         this.gear = startGear;
         this.cadence = startCadence;
@@ -328,7 +328,7 @@ class Bicycle {
         return cadence;
     }
 
-    // void返450635425回值函数没有返回值
+    // void返回值函数没有返回值
     public void setCadence(int newValue) {
         cadence = newValue;
     }
@@ -405,4 +405,4 @@ class PennyFarthing extends Bicycle {
 
 * [泛型](http://docs.oracle.com/javase/tutorial/java/generics/index.html)
 
-* [Java代码规范](http://www.oracle.com/technetwork/java/codeconv-138413.html)
+* [Java代码规范](http://www.oracle.com/technetwork/java/codeconvtoc-136057.html)

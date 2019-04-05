@@ -14,7 +14,7 @@ Syntax, in der sich Dokumente leicht schreiben *und* lesen lassen. Außerdem
 sollte Markdown sich leicht nach HTML (und in andere Formate) konvertieren
 lassen.
 
-```markdown
+```md
 <!-- Markdown ist eine Obermenge von HTML - jede valide HTML-Datei ist also
 automatisch valides Markdown - was heisst dass wir jedes HTML-Element (also auch
 Kommentare) in Markdown benutzen können, ohne dass der Parser sie verändert.
@@ -56,7 +56,7 @@ __Genau wie dieser.__
 **_Dieser auch!_**
 *__Und dieser genau so!__*
 
-<!-- In "Github Flavored Markdown", dem von Github verwendeten Dialekt / Parser,
+<!-- In "GitHub Flavored Markdown", dem von GitHub verwendeten Dialekt / Parser,
 gibt es auch noch durchgestrichenen Text: -->
 
 ~~Dieser Text wird durchgestrichen dargestellt.~~
@@ -144,11 +144,11 @@ indem du eine Zeile mit vier Leerzeichen oder einem Tabulator einrückst -->
         puts item
     end
 
-<!-- Innerhalb normalen Texts kannst du Code mit Backticks ` auszeichnen -->
+<!-- Innerhalb normalen Texts kannst du Code mit Backticks \` auszeichnen -->
 
 Hermann hatte nicht die leiseste Ahnung, was dieses `go_to()` bedeuten könnte!
 
-<!-- In "Github Flavored Markdown" gibt es für Code nocheinmal eine
+<!-- In "GitHub Flavored Markdown" gibt es für Code nocheinmal eine
 besondere Syntax -->
 
 \`\`\`ruby <!-- in "echt" musst du die Backslashes entfernen: ```ruby ! -->
@@ -157,7 +157,7 @@ def foobar
 end
 \`\`\` <!-- hier auch keine Backslashes, nur ``` -->
 
-<-- der obige Block muss nicht extra eingerückt werden, außerdem fügt Github
+<-- der obige Block muss nicht extra eingerückt werden, außerdem fügt GitHub
 Syntax-Highlighting für die nach dem ``` angegebene Sprache hinzu -->
 
 <!-- Horizontale Linie (<hr />) -->
@@ -233,7 +233,7 @@ Ich würde *diesen Teil gerne mit Sternen umschließen*, doch ohne dass er kursi
 wird. Also mache ich folgendes: \*Ich umschließe diesen Text mit Sternen\*!
 
 <!-- Tabellen -->
-<!-- Tabellen gibt es bis jetzt nur in "Github Flavored Markdown".
+<!-- Tabellen gibt es bis jetzt nur in "GitHub Flavored Markdown".
 Zudem sind sie ziemlich mühselig, aber wenn du es wirklich wissen willst: -->
 
 | Spalte1      | Spalte2  | Spalte3       |
@@ -253,4 +253,4 @@ Ganz schön hässlich | vielleicht doch lieber | wieder aufhören
 
 Mehr Informationen gibt es in [John Gruber's offiziellem Blog-Post](http://daringfireball.net/projects/markdown/syntax)
 und bei Adam Pritchards [grandiosem Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
-Infos zu Github Flavored Markdown [gibt es hier](https://help.github.com/articles/github-flavored-markdown).
+Infos zu GitHub Flavored Markdown [gibt es hier](https://help.github.com/articles/github-flavored-markdown).

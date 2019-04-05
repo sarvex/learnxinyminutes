@@ -2,7 +2,8 @@
 language: yaml
 filename: learnyaml.yaml
 contributors:
-  - ["Adam Brenecki", "https://github.com/adambrenecki"]
+- [Adam Brenecki, 'https://github.com/adambrenecki']
+- [Suhas SG, 'https://github.com/jargnar']
 ---
 
 YAML is a data serialisation language designed to be directly writable and
@@ -10,9 +11,11 @@ readable by humans.
 
 It's a strict superset of JSON, with the addition of syntactically
 significant newlines and indentation, like Python. Unlike Python, however,
-YAML doesn't allow literal tab characters at all.
+YAML doesn't allow literal tab characters for indentation.
 
 ```yaml
+---  # document start
+
 # Comments in YAML look like this.
 
 ################
@@ -25,12 +28,16 @@ key: value
 another_key: Another value goes here.
 a_number_value: 100
 scientific_notation: 1e+12
+# The number 1 will be interpreted as a number, not a boolean. if you want
+# it to be interpreted as a boolean, use true
 boolean: true
 null_value: null
 key with spaces: value
 # Notice that strings don't need to be quoted. However, they can be.
-however: "A string, enclosed in quotes."
-"Keys can be quoted too.": "Useful if you want to put a ':' in your key."
+however: 'A string, enclosed in quotes.'
+'Keys can be quoted too.': "Useful if you want to put a ':' in your key."
+single quotes: 'have ''one'' escape pattern'
+double quotes: "have many: \", \0, \t, \u263A, \x0d\x0a == \r\n, and more."
 
 # Multiple-line strings can be written either as a 'literal block' (using |),
 # or a 'folded block' (using '>').
@@ -56,41 +63,50 @@ folded_style: >
 # COLLECTION TYPES #
 ####################
 
-# Nesting is achieved by indentation.
+# Nesting uses indentation. 2 space indent is preferred (but not required).
 a_nested_map:
-    key: value
-    another_key: Another Value
-    another_nested_map:
-        hello: hello
+  key: value
+  another_key: Another Value
+  another_nested_map:
+    hello: hello
 
 # Maps don't have to have string keys.
 0.25: a float key
 
-# Keys can also be multi-line objects, using ? to indicate the start of a key.
+# Keys can also be complex, like multi-line objects
+# We use ? followed by a space to indicate the start of a complex key.
 ? |
-    This is a key
-    that has multiple lines
+  This is a key
+  that has multiple lines
 : and this is its value
 
-# YAML also allows collection types in keys, but many programming languages
-# will complain.
+# YAML also allows mapping between sequences with the complex key syntax
+# Some language parsers might complain
+# An example
+? - Manchester United
+  - Real Madrid
+: [2001-01-01, 2002-02-02]
 
-# Sequences (equivalent to lists or arrays) look like this:
+# Sequences (equivalent to lists or arrays) look like this
+# (note that the '-' counts as indentation):
 a_sequence:
-    - Item 1
-    - Item 2
-    - 0.5 # sequences can contain disparate types.
-    - Item 4
-    - key: value
-      another_key: another_value
-    -
-        - This is a sequence
-        - inside another sequence
+  - Item 1
+  - Item 2
+  - 0.5  # sequences can contain disparate types.
+  - Item 4
+  - key: value
+    another_key: another_value
+  -
+    - This is a sequence
+    - inside another sequence
+  - - - Nested sequence indicators
+      - can be collapsed
 
 # Since YAML is a superset of JSON, you can also write JSON-style maps and
 # sequences:
 json_map: {"key": "value"}
 json_seq: [3, 2, 1, "takeoff"]
+and quotes are optional: {key: [3, 2, 1, takeoff]}
 
 #######################
 # EXTRA YAML FEATURES #
@@ -101,11 +117,34 @@ json_seq: [3, 2, 1, "takeoff"]
 anchored_content: &anchor_name This string will appear as the value of two keys.
 other_anchor: *anchor_name
 
+# Anchors can be used to duplicate/inherit properties
+base: &base
+  name: Everyone has same name
+
+# The regexp << is called Merge Key Language-Independent Type. It is used to
+# indicate that all the keys of one or more specified maps should be inserted
+# into the current map.
+
+foo: &foo
+  <<: *base
+  age: 10
+
+bar: &bar
+  <<: *base
+  age: 20
+
+# foo and bar would also have name: Everyone has same name
+
 # YAML also has tags, which you can use to explicitly declare types.
 explicit_string: !!str 0.5
 # Some parsers implement language specific tags, like this one for Python's
 # complex number type.
 python_complex_number: !!python/complex 1+2j
+
+# We can also use yaml complex keys with language specific tags
+? !!python/tuple [5, 7]
+: Fifty Seven
+# Would be {(5, 7): 'Fifty Seven'} in Python
 
 ####################
 # EXTRA YAML TYPES #
@@ -120,20 +159,28 @@ date: 2002-12-14
 # The !!binary tag indicates that a string is actually a base64-encoded
 # representation of a binary blob.
 gif_file: !!binary |
-    R0lGODlhDAAMAIQAAP//9/X17unp5WZmZgAAAOfn515eXvPz7Y6OjuDg4J+fn5
-    OTk6enp56enmlpaWNjY6Ojo4SEhP/++f/++f/++f/++f/++f/++f/++f/++f/+
-    +f/++f/++f/++f/++f/++SH+Dk1hZGUgd2l0aCBHSU1QACwAAAAADAAMAAAFLC
-    AgjoEwnuNAFOhpEMTRiggcz4BNJHrv/zCFcLiwMWYNG84BwwEeECcgggoBADs=
+  R0lGODlhDAAMAIQAAP//9/X17unp5WZmZgAAAOfn515eXvPz7Y6OjuDg4J+fn5
+  OTk6enp56enmlpaWNjY6Ojo4SEhP/++f/++f/++f/++f/++f/++f/++f/++f/+
+  +f/++f/++f/++f/++f/++SH+Dk1hZGUgd2l0aCBHSU1QACwAAAAADAAMAAAFLC
+  AgjoEwnuNAFOhpEMTRiggcz4BNJHrv/zCFcLiwMWYNG84BwwEeECcgggoBADs=
 
 # YAML also has a set type, which looks like this:
 set:
-    ? item1
-    ? item2
-    ? item3
+  ? item1
+  ? item2
+  ? item3
+or: {item1, item2, item3}
 
-# Like Python, sets are just maps with null values; the above is equivalent to:
+# Sets are just maps with null values; the above is equivalent to:
 set2:
-    item1: null
-    item2: null
-    item3: null
+  item1: null
+  item2: null
+  item3: null
+
+...  # document end
 ```
+
+### More Resources
+
++ [YAML official website](http://yaml.org/)
++ [Online YAML Validator](http://www.yamllint.com/)

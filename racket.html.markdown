@@ -114,17 +114,41 @@ some-var ; => 5
   "Alice"
   me) ; => "Bob"
 
+;; let* is like let, but allows you to use previous bindings in creating later bindings
+(let* ([x 1]
+       [y (+ x 1)])
+       (* x y))
+
+;; finally, letrec allows you to define recursive and mutually recursive functions
+(letrec ([is-even? (lambda (n)
+                       (or (zero? n)
+                           (is-odd? (sub1 n))))]
+           [is-odd? (lambda (n)
+                      (and (not (zero? n))
+                           (is-even? (sub1 n))))])
+    (is-odd? 11))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 3. Structs and Collections
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Structs
+; By default, structs are immutable
 (struct dog (name breed age))
 (define my-pet
   (dog "lassie" "collie" 5))
 my-pet ; => #<dog>
+; returns whether the variable was constructed with the dog constructor
 (dog? my-pet) ; => #t
+; accesses the name field of the variable constructed with the dog constructor
 (dog-name my-pet) ; => "lassie"
+
+; You can explicitly declare a struct to be mutable with the #:mutable option
+(struct rgba-color (red green blue alpha) #:mutable)
+(define burgundy
+   (rgba-color 144 0 32 1.0))
+(set-rgba-color-green! burgundy 10)
+(rgba-color-green burgundy) ; => 10
 
 ;;; Pairs (immutable)
 ;; `cons' constructs pairs, `car' and `cdr' extract the first
@@ -140,8 +164,25 @@ my-pet ; => #<dog>
 (cons 1 (cons 2 (cons 3 null))) ; => '(1 2 3)
 ;; `list' is a convenience variadic constructor for lists
 (list 1 2 3) ; => '(1 2 3)
-;; and a quote can also be used for a literal list value
+;; a quote can also be used for a literal list value
 '(1 2 3) ; => '(1 2 3)
+;; a quasiquote (represented by the backtick character) with commas 
+;; can be used to evaluate functions
+`(1 ,(+ 1 1) 3) ; => '(1 2 3)
+
+;; With lists, car/cdr work slightly differently
+(car '(1 2 3)) ; => 1
+(cdr '(1 2 3)) ; => '(2 3)
+
+;; Racket also has predefined functions on top of car and cdr, to extract parts of a list
+(cadr (list 1 2 3)) ; => 2
+(car (cdr (list 1 2 3))) ; => 2
+
+(cddr (list 1 2 3)) ; => '(3)
+(cdr (cdr (list 1 2 3))) ; => '(3)
+
+(caddr (list 1 2 3)) ; => 3
+(car (cdr (cdr (list 1 2 3)))) ; => 3
 
 ;; Can still use `cons' to add an item to the beginning of a list
 (cons 4 '(1 2 3)) ; => '(4 1 2 3)
@@ -208,7 +249,7 @@ m ; => '#hash((b . 2) (a . 1) (c . 3))  <-- no `d'
 (hash-remove m 'a) ; => '#hash((b . 2) (c . 3))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 3. Functions
+;; 4. Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Use `lambda' to create functions.
@@ -278,14 +319,14 @@ m ; => '#hash((b . 2) (a . 1) (c . 3))  <-- no `d'
                                          ; => "Hi Finn, 6 extra args"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 4. Equality
+;; 5. Equality
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; for numbers use `='
 (= 3 3.0) ; => #t
 (= 2 1)   ; => #f
 
-;; `eq?' returns #t if 2 arguments refer to the same object (in memory), 
+;; `eq?' returns #t if 2 arguments refer to the same object (in memory),
 ;; #f otherwise.
 ;; In other words, it's a simple pointer comparison.
 (eq? '() '()) ; => #t, since there exists only one empty list in memory
@@ -320,7 +361,7 @@ m ; => '#hash((b . 2) (a . 1) (c . 3))  <-- no `d'
 (eqv? (string-append "foo" "bar") (string-append "foo" "bar"))   ; => #f
 
 ;; `equal?' supports the comparison of the following datatypes:
-;; strings, byte strings, pairs, mutable pairs, vectors, boxes, 
+;; strings, byte strings, pairs, mutable pairs, vectors, boxes,
 ;; hash tables, and inspectable structures.
 ;; for other datatypes, `equal?' and `eqv?' return the same result.
 (equal? 3 3.0)                                                   ; => #f
@@ -328,7 +369,7 @@ m ; => '#hash((b . 2) (a . 1) (c . 3))  <-- no `d'
 (equal? (list 3) (list 3))                                       ; => #t
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 5. Control Flow
+;; 6. Control Flow
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; Conditionals
@@ -464,7 +505,7 @@ m ; => '#hash((b . 2) (a . 1) (c . 3))  <-- no `d'
   (+ 1 (raise 2))) ; => 2
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 6. Mutation
+;; 7. Mutation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Use `set!' to assign a new value to an existing variable
@@ -500,7 +541,7 @@ vec ; => #(1 2 3 4)
 (hash-remove! m3 'a)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 7. Modules
+;; 8. Modules
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Modules let you organize code into multiple files and reusable
@@ -527,7 +568,7 @@ vec ; => #(1 2 3 4)
 ; (show "~a" 1 #\A) ; => error, `show' was not exported
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 8. Classes and Objects
+;; 9. Classes and Objects
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Create a class fish% (-% is idiomatic for class bindings)
@@ -568,7 +609,7 @@ vec ; => #(1 2 3 4)
 (send (new (add-color fish%) [size 10] [color 'red]) get-color)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 9. Macros
+;; 10. Macros
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Macros let you extend the syntax of the language
@@ -610,7 +651,7 @@ vec ; => #(1 2 3 4)
 ;; it, the compiler will get in an infinite loop
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 10. Contracts
+;; 11. Contracts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Contracts impose constraints on values exported from modules
@@ -637,7 +678,7 @@ vec ; => #(1 2 3 4)
 ;; more details....
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 11. Input & output
+;; 12. Input & output
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Racket has this concept of "port", which is very similar to file
